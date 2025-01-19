@@ -1,4 +1,1 @@
-/.venv/**
-/.venv/bin/**
-/.venv/lib64/**
-/.venv/lib/**
+.venv/**
