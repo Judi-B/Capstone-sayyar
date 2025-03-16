@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="django" name="Django">
+      <configuration>
+        <option name="rootFolder" value="$MODULE_DIR$/sayyar-backend" />
+        <option name="settingsModule" value="sayyar/settings.py" />
+        <option name="manageScript" value="manage.py" />
+        <option name="environment" value="&lt;map/&gt;" />
+        <option name="doNotUseTestRunner" value="false" />
+        <option name="trackFilePattern" value="" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.venv/include" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/lib/python3.10/site-packages/djangorestframework-3.15.2.dist-info" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/lib/python3.10/site-packages/rest_framework" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/lib/python3.10/site-packages/tutorial" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/build" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.10 (Capstone-sayyar)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Django" />
+  </component>
+</module>
