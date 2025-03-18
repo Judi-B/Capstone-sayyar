@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'sign_up_screen.dart';
+import 'transport_companies_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -73,7 +75,12 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFC2EA4C),
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 100),
@@ -85,7 +92,12 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
                 child: Text(
                   "New to Sayyar? Sign up",
                   style: TextStyle(color: Color(0xFF907FFD)),
