@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'onboarding_1.dart';
+import 'role_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,10 +13,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Onboarding1()),
+        MaterialPageRoute(builder: (context) => RoleSelectionScreen()),
       );
     });
   }
@@ -29,17 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "SAYYAR",
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF907FFD),
-              ),
+            Image.asset(
+              'assets/images/logo_white_back.png',
+              fit: BoxFit.cover,
             ),
             Text(
               "Ready When You Are!",
-              style: TextStyle(fontSize: 18, color: Colors.black),
+              style: TextStyle(fontFamily: "Zen Dots", fontSize: 24, color: Colors.grey.shade900),
             ),
           ],
         ),

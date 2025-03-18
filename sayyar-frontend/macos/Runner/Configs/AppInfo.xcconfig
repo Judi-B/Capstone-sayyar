@@ -8,7 +8,7 @@
 PRODUCT_NAME = sayyar_frontend
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.sayyarFrontend
+PRODUCT_BUNDLE_IDENTIFIER = com.sayyar.sayyarFrontend
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.sayyar. All rights reserved.

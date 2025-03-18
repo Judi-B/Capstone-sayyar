@@ -6,7 +6,7 @@ class CompanyDetailsScreen extends StatelessWidget {
 
   CompanyDetailsScreen({super.key, required this.companyName});
 
-  final Map<String, List<String>> companyDetails = {
+  static const Map<String, List<String>> companyDetails = {
     "Coverage": ["City-wide transport", "Inter-city travel"],
     "Destination": ["Jeddah, Mecca, Riyadh"],
     "Target Customers": ["Students", "Working Professionals", "Tourists"],
@@ -22,6 +22,8 @@ class CompanyDetailsScreen extends StatelessWidget {
     ],
     "Cancellation": ["Free cancellation up to 24 hours before ride"],
   };
+
+  static const EdgeInsets commonPadding = EdgeInsets.all(20.0);
 
   Widget _buildDetailSection(String title, List<String> details) {
     return Padding(
@@ -54,40 +56,46 @@ class CompanyDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(companyName, style: TextStyle(color: Colors.black)),
+        title: Text(
+          companyName,
+          style: TextStyle(color: Colors.black, fontFamily: "Roboto"),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: commonPadding,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: CircleAvatar(radius: 40, child: Text("😊"))),
+            Center(
+              child: CircleAvatar(
+                radius: 40,
+                backgroundColor:
+                    Colors.grey.shade200, // ✅ Background color added
+                child: Icon(
+                  Icons.business,
+                  size: 40,
+                  color: Colors.black,
+                ), // ✅ Icon color ensured
+              ),
+            ),
             SizedBox(height: 20),
-            _buildDetailSection("Coverage", companyDetails["Coverage"]!),
-            _buildDetailSection("Destination", companyDetails["Destination"]!),
-            _buildDetailSection(
-              "Target Customers",
-              companyDetails["Target Customers"]!,
+
+            // ✅ Fix: Wrap ListView.builder inside Expanded
+            Expanded(
+              child: Padding(
+                padding: commonPadding,
+                child: ListView.builder(
+                  itemCount: companyDetails.length,
+                  itemBuilder: (context, index) {
+                    String key = companyDetails.keys.elementAt(index);
+                    return _buildDetailSection(key, companyDetails[key]!);
+                  },
+                ),
+              ),
             ),
-            _buildDetailSection(
-              "Pricing Options",
-              companyDetails["Pricing Options"]!,
-            ),
-            _buildDetailSection(
-              "Available Time Intervals",
-              companyDetails["Available Time Intervals"]!,
-            ),
-            _buildDetailSection(
-              "Pickup/Dropoff Options",
-              companyDetails["Pickup/Dropoff Options"]!,
-            ),
-            _buildDetailSection(
-              "Cancellation",
-              companyDetails["Cancellation"]!,
-            ),
-            Spacer(),
+
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(

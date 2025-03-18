@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,6 +16,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     21.3891,
     39.8579,
   ); // Default location (Jeddah)
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController universityController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController districtController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController bankController = TextEditingController();
+  final TextEditingController parentPhoneNumberController = TextEditingController();
+
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -33,12 +49,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTextField("First Name", "Your Entry"),
-            _buildTextField("Last Name", "Your Entry"),
-            _buildTextField("Date of Birth", "DD-MM-YYYY"),
-            _buildTextField("Phone Number", "+966 5x xxx xxxx"),
-            _buildTextField("Email", "example@example.com"),
+            _buildTextField("First Name", "Your Entry", firstNameController),
+            _buildTextField("Last Name", "Your Entry", lastNameController),
+            _buildTextField("Date of Birth", "DD-MM-YYYY", dateOfBirthController),
+            _buildTextField("Phone Number", "+966 5x xxx xxxx", phoneNumberController),
+            _buildTextField("Email", "example@example.com", emailController),
+            _buildTextField("Password", "Your Password", passwordController, obscureText: true),
+            _buildTextField("University", "Your University", universityController),
+            _buildTextField("City", "Your City", cityController),
+            _buildTextField("District", "Your District", districtController),
+            _buildTextField("Location", "Your Location", locationController),
+            _buildTextField("Bank", "Your Bank", bankController),
+            _buildTextField("Parent Phone Number", "Parent Phone Number", parentPhoneNumberController),
             SizedBox(height: 20),
+
             Text(
               "Location",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -76,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     left: 10,
                     right: 10,
                     child: Container(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha:0.8),
                       padding: EdgeInsets.all(8),
                       child: Center(
                         child: Text(
@@ -97,7 +121,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: () {
                 // Handle Sign-Up Logic
                 signupStudent(
-                  email: ""
+                  email: emailController.text,
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  phoneNumber: phoneNumberController.text,
+                  dateOfBirth: dateOfBirthController.text,
+                  password: passwordController.text,
+                  university: universityController.text,
+                  city: cityController.text,
+                  district: districtController.text,
+                  location: locationController.text,
+                  bank: bankController.text,
+                  parentPhoneNumber: parentPhoneNumberController.text,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -111,10 +147,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildTextField(String label, String placeholder) {
+  Widget _buildTextField(String label, String placeholder, TextEditingController controller, {bool obscureText = false}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 15.0),
       child: TextField(
+        controller: controller,
+        obscureText: obscureText,
         decoration: InputDecoration(
           labelText: label,
           hintText: placeholder,
@@ -125,8 +163,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 Future<void> signupStudent({
   required String email,
@@ -142,7 +178,7 @@ Future<void> signupStudent({
   required String bank,
   required String parentPhoneNumber,
 }) async {
-  final url = Uri.parse('localhost:8000/signup/student/');
+  final url = Uri.parse('http://localhost:8000/signup/student/');
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},

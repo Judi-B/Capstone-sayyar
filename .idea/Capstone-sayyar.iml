@@ -21,9 +21,15 @@
       <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/flutter_sayyar/build" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/sayyar-frontend/build" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (Capstone-sayyar)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.13 (Capstone-sayyar)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

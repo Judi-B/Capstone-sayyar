@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart'; // Import the splash screen
 
 void main() {
-  runApp(MyApp());
+  runApp(SayyarApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SayyarApp extends StatelessWidget {
+  const SayyarApp({super.key});
 
   @override
   Widget build(BuildContext context) {

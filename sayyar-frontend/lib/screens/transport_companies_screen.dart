@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'company_details_screen.dart';
 
 class TransportCompaniesScreen extends StatelessWidget {
+  // const TransportCompaniesScreen({super.key});
+
   final List<Map<String, dynamic>> companies = [
     {
       "name": "Arab Masters Transport Company",
@@ -29,8 +31,6 @@ class TransportCompaniesScreen extends StatelessWidget {
       "rating": 4.0,
     },
   ];
-
-  const TransportCompaniesScreen({super.key});
 
   Widget _buildStarRating(double rating) {
     int fullStars = rating.floor();
@@ -80,7 +80,7 @@ class TransportCompaniesScreen extends StatelessWidget {
                 itemCount: companies.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    leading: CircleAvatar(child: Text("😊")),
+                    leading: CircleAvatar(child: Icon(Icons.business)),
                     title: Text(
                       companies[index]["name"]!,
                       style: TextStyle(fontWeight: FontWeight.bold),
