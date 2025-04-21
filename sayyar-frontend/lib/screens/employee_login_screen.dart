@@ -4,17 +4,18 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'employee_register_screen.dart';
 import 'student_register_screen.dart';
 import 'transport_companies_screen.dart';
 
-class StudentLoginScreen extends StatefulWidget {
-  const StudentLoginScreen({super.key});
+class EmployeeLoginScreen extends StatefulWidget {
+  const EmployeeLoginScreen({super.key});
 
   @override
-  _StudentLoginScreenState createState() => _StudentLoginScreenState();
+  _EmployeeLoginScreenState createState() => _EmployeeLoginScreenState();
 }
 
-class _StudentLoginScreenState extends State<StudentLoginScreen> {
+class _EmployeeLoginScreenState extends State<EmployeeLoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -25,7 +26,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
       _isLoading = true;
     });
 
-    String result = await loginStudent(
+    String result = await loginEmployee(
       emailController.text,
       passwordController.text,
       context,
@@ -78,7 +79,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
-                        "Welcome Back, Student!",
+                        "Welcome Back, Employee!",
                         style: TextStyle(
                           fontFamily: "Zen Dots",
                           fontSize: 24,
@@ -135,16 +136,16 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
                           _isLoading ? null : _handleLogin();
                         },
                         color:
-                            _isLoading ? Colors.grey : const Color(0xFFC2EA4C),
+                        _isLoading ? Colors.grey : const Color(0xFFC2EA4C),
                         textColor: Colors.black,
                       ),
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const StudentRegisterScreen(),
+                              builder: (context) => const EmployeeRegisterScreen(),
                             ),
                           );
                         },
@@ -257,13 +258,13 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-Future<String> loginStudent(
-  String email,
-  String password,
-  BuildContext context,
-) async {
+Future<String> loginEmployee(
+    String email,
+    String password,
+    BuildContext context,
+    ) async {
   const String apiUrl =
-      'http://192.168.0.156:8000/api/login/student/'; // Change this to your actual backend URL
+      'http://192.168.0.156:8000/api/login/employee/'; // Change this to your actual backend URL
 
   try {
     final response = await http.post(
@@ -286,7 +287,7 @@ Future<String> loginStudent(
   } on TimeoutException catch (_) {
     return "Error: Login timed out. Please try again.";
   }
-    catch (error) {
+  catch (error) {
     return "Error: $error";
   }
 }

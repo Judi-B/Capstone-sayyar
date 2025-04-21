@@ -1,14 +1,17 @@
+import datetime
+
 import environ
 
 import firebase_admin
 from django.contrib.auth.hashers import make_password
-from firebase_admin import credentials, auth as firebase_auth
+from firebase_admin import credentials
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework.views import APIView
 from .serializers import StudentSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+import jwt
 
 env = environ.Env()
 
@@ -29,98 +32,56 @@ def get_tokens_for_user(user):
 
 
 class LoginView(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        user = authenticate(username=email, password=password)  # Assumes email is used as username
+
+        if (not user) or (not user.check_password(password)):
+            return Response({'error': 'Invalid credentials'}, status=400)
+
+        now = datetime.datetime.now()
+
+        payload = {
+            "id": user.id,
+            "exp": now + datetime.timedelta(days=1),
+            "iat": now,
+        }
+
+        token = jwt.encode(payload, env("SECRET_KEY"), algorithm='HS256')
+
+        response = Response()
+        response.set_cookie(key="jwt", value=token, httponly=True)
+        response.data = {
+            "token": token
+        }
+        return response
+        #
+        # refresh = RefreshToken.for_user(user)  # JWT Token generation
+        # return Response({
+        #     'token': str(refresh.access_token),
+        #     'refresh': str(refresh),
+        # })
+
+
+
+class RegisterView(APIView):
     """
-    Supports two login methods:
-    1. Google Authentication using Firebase ID token.
-    2. Django Authentication using email & password.
+    Allows users to sign up using Email & Password (Django authentication).
     """
 
     def post(self, request):
         data = request.data
 
-        if "firebase_token" in data:
-            return self.google_login(data["firebase_token"])
-
-        elif "email" in data and "password" in data:
-            return self.django_login(data["email"], data["password"])
-
-        return Response(
-            {"error": "Invalid request, provide either 'firebase_token' or 'email' & 'password'"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    def google_login(self, firebase_token):
-        """Handle Google Login using Firebase Token"""
-        try:
-            decoded_token = firebase_auth.verify_id_token(firebase_token)
-            uid = decoded_token.get("uid")
-            email = decoded_token.get("email")
-            name = decoded_token.get("name")
-
-            if not email:
-                return Response({"error": "Email not found in Firebase response"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Create or retrieve user
-            user, created = User.objects.get_or_create(email=email, defaults={"username": name})
-
-            # Generate JWT
-            tokens = get_tokens_for_user(user)
-            return Response({"message": "Google login successful", "jwt": tokens}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    def django_login(self, email, password):
-        """Handle Django Authentication using Email & Password"""
-        user = authenticate(username=email, password=password)
-        if user is not None:
-            tokens = get_tokens_for_user(user)
-            return Response({"message": "Django login successful", "jwt": tokens}, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SignupView(APIView):
-    """
-    Allows users to sign up using:
-    1. Email & Password (Django authentication).
-    2. Google Authentication (Firebase token).
-    """
-
-    def post(self, request):
-        data = request.data
-
-        if "firebase_token" in data:
-            return self.google_signup(data["firebase_token"])
-
-        elif "email" in data and "password" in data:
+        if "email" in data and "password" in data:
             return self.django_signup(data["email"], data["password"], data.get("username", ""))
 
         return Response(
-            {"error": "Invalid request. Provide either 'firebase_token' or 'email' & 'password'"},
+            {"error": "Invalid request. Provide valid 'email' & 'password'"},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
-    def google_signup(self, firebase_token):
-        """Handle Signup using Google Firebase Token"""
-        try:
-            decoded_token = firebase_auth.verify_id_token(firebase_token)
-            uid = decoded_token.get("uid")
-            email = decoded_token.get("email")
-            name = decoded_token.get("name", "User")
-
-            if not email:
-                return Response({"error": "Email not found in Firebase response"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Create user if not exists
-            user, created = User.objects.get_or_create(email=email, defaults={"username": name})
-
-            # Generate JWT
-            tokens = get_tokens_for_user(user)
-            return Response({"message": "Signup successful", "jwt": tokens}, status=status.HTTP_201_CREATED)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def django_signup(self, email, password, username):
         """Handle Signup using Email & Password"""
@@ -132,10 +93,10 @@ class SignupView(APIView):
 
         return Response({"message": "Signup successful", "jwt": tokens}, status=status.HTTP_201_CREATED)
 
-class StudentSignupView(APIView):
+class StudentRegisterView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

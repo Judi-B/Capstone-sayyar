@@ -1,13 +1,15 @@
-from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from rest_framework.fields import CharField
+from django.contrib.gis.db import models
+from django.db.models import TextChoices
+
+from businesses.models import Company
 
 
-# This class is created to modify the authentication requirements
+class UniversityChoices(TextChoices):
+    kau = "KAU", "King Abdulaziz University"
+    dah = "DAH", "Dar Al-Hekma University"
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, phone_number, email, first_name, last_name, password):
         if not phone_number:
@@ -21,7 +23,7 @@ class CustomUserManager(BaseUserManager):
         if not password:
             raise ValueError('A password is needed.')
 
-        user = self.model(email=email, first_name=first_name, last_name=last_name)
+        user = self.model(phone_number=phone_number, email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()
         return user
@@ -51,7 +53,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255, null=False)
     last_name = models.CharField(max_length=255, null=False)
     email = models.EmailField(max_length=255, null=False, unique=True)
-    date_of_birth = models.DateField(blank=True, null=True)
     auth_token = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -59,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'date_of_birth']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
 
     objects = CustomUserManager()
 
@@ -69,16 +70,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 # Student model
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    university = models.CharField(max_length=255)
+    university = models.CharField(max_length=255, choices=UniversityChoices)
     city = models.CharField(max_length=255)
     district = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    bank = models.CharField(max_length=255)
-    parent_phone_number = models.CharField(max_length=100)
+    location = models.PointField(geography=True)
+    bank = models.CharField(max_length=255, blank=True, null=True)
+    parent_phone_number = models.CharField(max_length=100, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.user = User.objects.create(
+                email=kwargs.get("email"),
+                first_name=kwargs.get("first_name"),
+                last_name=kwargs.get("last_name"),
+                phone_number=kwargs.get("phone_number")
+            )
+        super().save(*args, **kwargs)
     class Meta:
         permissions = [
-            ("view_student", "Can view student"),
             ("edit_student", "Can edit student"),
         ]
 
@@ -90,10 +99,20 @@ class Student(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     role = models.CharField(max_length=255)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.user = User.objects.create(
+                email=kwargs.get("email"),
+                first_name=kwargs.get("first_name"),
+                last_name=kwargs.get("last_name"),
+                phone_number=kwargs.get("phone_number")
+            )
+        super().save(*args, **kwargs)
 
     class Meta:
         permissions = [
-            ("view_employee", "Can view employee"),
             ("edit_employee", "Can edit employee"),
         ]
 
@@ -105,11 +124,21 @@ class Employee(models.Model):
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     license_number = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
-    
+    status = models.CharField(max_length=255, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.user = User.objects.create(
+                email=kwargs.get("email"),
+                first_name=kwargs.get("first_name"),
+                last_name=kwargs.get("last_name"),
+                phone_number=kwargs.get("phone_number")
+            )
+        super().save(*args, **kwargs)
+
     class Meta:
         permissions = [
-            ("view_driver", "Can view driver"),
             ("edit_driver", "Can edit driver"),
         ]
 

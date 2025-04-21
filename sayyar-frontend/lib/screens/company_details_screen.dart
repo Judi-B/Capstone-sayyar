@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sign_up_screen.dart';
+import 'student_register_screen.dart';
 
 class CompanyDetailsScreen extends StatelessWidget {
   final String companyName;
@@ -97,12 +97,7 @@ class CompanyDetailsScreen extends StatelessWidget {
 
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignUpScreen()),
-                );
-              },
+              onPressed: (){},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),

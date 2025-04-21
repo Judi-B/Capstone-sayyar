@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'driver_login_screen.dart';
+import 'employee_login_screen.dart';
 import 'student_login_screen.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
@@ -18,161 +20,91 @@ class RoleSelectionScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 20),
-          Flexible(
+          const SizedBox(height: 20),
+          Expanded(
             flex: 7,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 50.0,
-                      vertical: 60.0,
-                    ),
-                    color: Colors.blueGrey.shade50,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "You Are A...",
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 60),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStateProperty.all<Color>(
-                                        Colors.indigo.shade200,
-                                      ),
-                                  padding: WidgetStateProperty.all<EdgeInsets>(
-                                    EdgeInsets.symmetric(
-                                      horizontal: 30,
-                                      vertical: 15,
-                                    ),
-                                  ),
-                                  shape: WidgetStateProperty.all<
-                                    RoundedRectangleBorder
-                                  >(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "Student",
-                                  style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 30),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStateProperty.all<Color>(
-                                        Colors.indigo.shade200,
-                                      ),
-                                  padding: WidgetStateProperty.all<EdgeInsets>(
-                                    EdgeInsets.symmetric(
-                                      horizontal: 30,
-                                      vertical: 15,
-                                    ),
-                                  ),
-                                  shape: WidgetStateProperty.all<
-                                    RoundedRectangleBorder
-                                  >(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {},
-                                child: Text(
-                                  "Driver",
-                                  style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 30),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStateProperty.all<Color>(
-                                        Colors.indigo.shade200,
-                                      ),
-                                  padding: WidgetStateProperty.all<EdgeInsets>(
-                                    EdgeInsets.symmetric(
-                                      horizontal: 30,
-                                      vertical: 15,
-                                    ),
-                                  ),
-                                  shape: WidgetStateProperty.all<
-                                    RoundedRectangleBorder
-                                  >(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {},
-                                child: Text(
-                                  "Business",
-                                  style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 60.0),
+              color: Colors.blueGrey.shade50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "You Are A...",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontFamily: "Roboto",
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 60),
+                  _RoleButton(
+                    label: "Student",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const StudentLoginScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  _RoleButton(
+                    label: "Driver",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DriverLoginScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  _RoleButton(
+                    label: "Business",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const EmployeeLoginScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _RoleButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onPressed;
+
+  const _RoleButton({required this.label, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.indigo.shade200,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+        ),
+        onPressed: onPressed ?? () {},
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: "Roboto",
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
