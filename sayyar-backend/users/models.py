@@ -76,6 +76,8 @@ class Student(models.Model):
     location = models.PointField(geography=True)
     bank = models.CharField(max_length=255, blank=True, null=True)
     parent_phone_number = models.CharField(max_length=100, blank=True, null=True)
+    is_subscribed = models.BooleanField(default=False)
+    subscribed_company = models.ForeignKey(Company, on_delete=models.SET_NULL, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -123,7 +125,7 @@ class Employee(models.Model):
 # Driver model
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    license_number = models.CharField(max_length=255)
+    licence_number = models.CharField(max_length=255)
     status = models.CharField(max_length=255, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -143,4 +145,4 @@ class Driver(models.Model):
         ]
 
     def __str__(self):
-        return f"Driver: {self.user.first_name} {self.user.last_name}, License: {self.license_number}"
+        return f"Driver: {self.user.first_name} {self.user.last_name}, Licence: {self.licence_number}"

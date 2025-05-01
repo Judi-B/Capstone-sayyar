@@ -1,7 +1,9 @@
 from django.contrib.gis.geos import Point
 from django.db import transaction
 from rest_framework import serializers
-from .models import User, Student
+
+from businesses.models import Company
+from .models import User, Student, Employee, Driver
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,3 +54,53 @@ class StudentSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(**user_data)
             student = Student.objects.create(user=user, **validated_data)
             return student
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
+    role = serializers.CharField(max_length=255)
+    company = serializers.CharField(max_length=255)
+
+    class Meta:
+        model = Employee
+        fields = [
+            'user',
+            'role',
+            'company'
+        ]
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            company_name = validated_data.pop('company', None)
+            if company_name and Company.objects.filter(name=company_name).exists():
+                validated_data['company'] = Company.objects.get(name=company_name)
+            user_data = validated_data.pop('user')
+            user = User.objects.create_user(**user_data)
+            employee = Employee.objects.create(user=user, **validated_data)
+            return employee
+
+
+class DriverSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
+    licence_number = serializers.CharField(max_length=255)
+    company = serializers.CharField(max_length=255)
+
+    class Meta:
+        model = Driver
+        fields = [
+            'user',
+            'licence_number',
+            'company'
+        ]
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            company_name = validated_data.pop('company', None)
+            if company_name and Company.objects.filter(name=company_name).exists():
+                validated_data['company'] = Company.objects.get(name=company_name)
+            user_data = validated_data.pop('user')
+            user = User.objects.create_user(**user_data)
+            driver = Driver.objects.create(user=user, **validated_data)
+            return driver

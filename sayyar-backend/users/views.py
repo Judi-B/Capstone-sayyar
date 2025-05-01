@@ -3,11 +3,12 @@ import datetime
 import environ
 
 import firebase_admin
-from django.contrib.auth.hashers import make_password
 from firebase_admin import credentials
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
-from .serializers import StudentSerializer
+
+from .models import Student, Employee, Driver
+from .serializers import StudentSerializer, EmployeeSerializer, DriverSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -31,15 +32,48 @@ def get_tokens_for_user(user):
     }
 
 
-class LoginView(APIView):
+class StudentLoginView(APIView):
 
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
+        user = User.objects.get(email=email)
 
-        user = authenticate(username=email, password=password)  # Assumes email is used as username
+        student = Student.objects.filter(user=user).first()  # Assumes email is used as username
 
-        if (not user) or (not user.check_password(password)):
+        if (not student) or (not user.check_password(password)):
+            return Response({'error': 'Invalid credentials'}, status=400)
+
+        now = datetime.datetime.now()
+
+        payload = {
+            "id": user.id,
+            "exp": now + datetime.timedelta(days=1),
+            "iat": now,
+        }
+
+        token = jwt.encode(payload, env("SECRET_KEY"), algorithm='HS256')
+
+        response = Response()
+        response.set_cookie(key="jwt", value=token, httponly=True)
+        response.data = {
+            "token": token,
+            "first_name": user.first_name,
+            "is_subscribed": student.is_subscribed,
+            "subscribed_company": student.subscribed_company,
+        }
+        return response
+
+class EmployeeLoginView(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = User.objects.get(email=email)
+
+        employee = Employee.objects.filter(user=user).first()  # Assumes email is used as username
+
+        if (not employee) or (not user.check_password(password)):
             return Response({'error': 'Invalid credentials'}, status=400)
 
         now = datetime.datetime.now()
@@ -58,44 +92,58 @@ class LoginView(APIView):
             "token": token
         }
         return response
-        #
-        # refresh = RefreshToken.for_user(user)  # JWT Token generation
-        # return Response({
-        #     'token': str(refresh.access_token),
-        #     'refresh': str(refresh),
-        # })
 
-
-
-class RegisterView(APIView):
-    """
-    Allows users to sign up using Email & Password (Django authentication).
-    """
+class DriverLoginView(APIView):
 
     def post(self, request):
-        data = request.data
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = User.objects.get(email=email)
 
-        if "email" in data and "password" in data:
-            return self.django_signup(data["email"], data["password"], data.get("username", ""))
+        driver = Driver.objects.filter(user=user).first()  # Assumes email is used as username
 
-        return Response(
-            {"error": "Invalid request. Provide valid 'email' & 'password'"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        if (not driver) or (not user.check_password(password)):
+            return Response({'error': 'Invalid credentials'}, status=400)
 
-    def django_signup(self, email, password, username):
-        """Handle Signup using Email & Password"""
-        if User.objects.filter(email=email).exists():
-            return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+        now = datetime.datetime.now()
 
-        user = User.objects.create(email=email, password=make_password(password))
-        tokens = get_tokens_for_user(user)
+        payload = {
+            "id": user.id,
+            "exp": now + datetime.timedelta(days=1),
+            "iat": now,
+        }
 
-        return Response({"message": "Signup successful", "jwt": tokens}, status=status.HTTP_201_CREATED)
+        token = jwt.encode(payload, env("SECRET_KEY"), algorithm='HS256')
+
+        response = Response()
+        response.set_cookie(key="jwt", value=token, httponly=True)
+        response.data = {
+            "token": token
+        }
+        return response
+
 
 class StudentRegisterView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmployeeRegisterView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = EmployeeSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DriverRegisterView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = DriverSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

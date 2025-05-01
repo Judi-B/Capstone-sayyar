@@ -3,11 +3,20 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,  # Get access & refresh tokens
     TokenRefreshView      # Refresh access token
 )
-from .views import LoginView, RegisterView, StudentRegisterView
+from .views import StudentRegisterView
+from .views import DriverRegisterView
+from .views import DriverLoginView
+from .views import EmployeeRegisterView
+from .views import EmployeeLoginView
+from .views import StudentLoginView
 
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('login/student/', LoginView.as_view(), name='student-login'),
+    path('login/student/', StudentLoginView.as_view(), name='student-login'),
     path('register/student/', StudentRegisterView.as_view(), name='student-register'),
+    path('login/employee/', EmployeeLoginView.as_view(), name='employee-login'),
+    path('register/employee/', EmployeeRegisterView.as_view(), name='employee-register'),
+    path('login/driver/', DriverLoginView.as_view(), name='driver-login'),
+    path('register/driver/', DriverRegisterView.as_view(), name='driver-register'),
 ]

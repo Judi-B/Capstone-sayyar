@@ -5,7 +5,7 @@ from django.contrib.gis.db import models
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
-    bank = models.CharField(max_length=255)
+    bank = models.CharField(max_length=255, null=True, blank=True)
 
 
 class University(models.Model):
