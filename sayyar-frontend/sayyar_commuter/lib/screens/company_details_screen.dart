@@ -153,7 +153,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => SubscriptionConfirmationScreen(subscriptionPlan: plan),
+                                            builder: (context) => SubscriptionConfirmationScreen(subscriptionPlan: plan, companyName: widget.companyName,),
                                           ),
                                         );
                                       }
@@ -202,7 +202,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => SubscriptionConfirmationScreen(subscriptionPlan: plan),
+                                            builder: (context) => SubscriptionConfirmationScreen(subscriptionPlan: plan, companyName: widget.companyName,),
                                           ),
                                         );
                                       }

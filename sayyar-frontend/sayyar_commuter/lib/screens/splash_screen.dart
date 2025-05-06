@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sayyar_commuter/screens/student_home.dart';
 import 'package:sayyar_commuter/screens/student_login_screen.dart';
 import 'package:sayyar_commuter/screens/transport_companies_screen.dart';
 import 'dart:async';
 import '../session_manager.dart';
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,11 +21,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _checkLoginStatus() async {
     bool isAuthenticated = await SessionManager.isAuthenticated();
+    bool? isSubscribed = await SessionManager.isSubscribed();
 
     // Wait a little to show splash effect
     await Future.delayed(Duration(milliseconds: 500));
 
-    if (isAuthenticated) {
+    if (isAuthenticated && isSubscribed!) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else if (isAuthenticated){
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),

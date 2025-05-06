@@ -1,68 +1,92 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class TrackDriverScreen extends StatefulWidget {
-  const TrackDriverScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  final String chatId; // ID of the chat (unique per conversation)
+
+  const ChatScreen({super.key, required this.chatId});
 
   @override
-  State<TrackDriverScreen> createState() => _TrackDriverScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _TrackDriverScreenState extends State<TrackDriverScreen> {
-  late GoogleMapController _mapController;
-  final LatLng _driverLocation = const LatLng(
-    21.3891,
-    39.8579,
-  ); // Default to Jeddah
+class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _controller = TextEditingController();
+  final userId = FirebaseAuth.instance.currentUser?.uid;
+
+  void _sendMessage() {
+    if (_controller.text.trim().isEmpty) return;
+
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget.chatId)
+        .collection('messages')
+        .add({
+      'text': _controller.text.trim(),
+      'senderId': userId,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    _controller.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Track Driver",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Chat')),
       body: Column(
         children: [
           Expanded(
-            child: GoogleMap(
-              onMapCreated: (controller) => _mapController = controller,
-              initialCameraPosition: CameraPosition(
-                target: _driverLocation,
-                zoom: 14,
-              ),
-              markers: {
-                Marker(
-                  markerId: const MarkerId("driver"),
-                  position: _driverLocation,
-                  infoWindow: const InfoWindow(title: "Driver Location"),
-                ),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('chats')
+                  .doc(widget.chatId)
+                  .collection('messages')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+
+                final messages = snapshot.data!.docs;
+
+                return ListView.builder(
+                  reverse: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = messages[index];
+                    final isMe = msg['senderId'] == userId;
+                    return Align(
+                      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: isMe ? Colors.green[200] : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(msg['text']),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(color: Colors.grey.shade300, blurRadius: 8),
-              ],
-            ),
-            child: Column(
-              children: const [
-                Text(
-                  "Your driver is 5 minutes away",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(hintText: "Type a message..."),
+                  ),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  "Estimated arrival: 4:45 PM",
-                  style: TextStyle(color: Colors.grey),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _sendMessage,
                 ),
               ],
             ),

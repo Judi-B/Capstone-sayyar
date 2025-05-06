@@ -127,6 +127,8 @@ class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     licence_number = models.CharField(max_length=255)
     status = models.CharField(max_length=255, null=True, blank=True)
+    vehicle_plate = models.CharField(max_length=50, null=True, blank=True)
+    is_available = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sayyar_commuter/screens/student_login_screen.dart';
 
 import '../session_manager.dart';
-import 'home_screen.dart';
+import 'driver_login_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -53,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
               SessionManager.clearToken();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => StudentLoginScreen()),
+                MaterialPageRoute(builder: (context) => DriverLoginScreen()),
                     (Route<dynamic> route) => false,
               );
             },

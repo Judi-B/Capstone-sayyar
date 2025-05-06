@@ -55,7 +55,7 @@ class _TransportCompaniesScreenState extends State<TransportCompaniesScreen>{
       "rating": 4.5,
     },
     {
-      "name": "Wasl Transport Company",
+      "name": "Wosol Transport Company",
       "description": "Excellence and leadership in transportation services",
       "rating": 4.2,
     },

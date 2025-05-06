@@ -56,6 +56,27 @@ class StudentSerializer(serializers.ModelSerializer):
             return student
 
 
+class StudentLoginSerializer(serializers.ModelSerializer):
+
+    token = serializers.SerializerMethodField()
+    first_name = serializers.CharField(source='user.first_name')
+    is_subscribed = serializers.BooleanField()
+    subscribed_company = serializers.CharField(source='subscribed_company.name')
+
+    class Meta:
+        model = Student
+        fields = [
+            'token',
+            'first_name',
+            'is_subscribed',
+            'subscribed_company'
+        ]
+
+    def get_token(self, obj):
+        return self.context.get('token')
+
+
+
 class EmployeeSerializer(serializers.ModelSerializer):
 
     user = UserSerializer()
@@ -104,3 +125,29 @@ class DriverSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(**user_data)
             driver = Driver.objects.create(user=user, **validated_data)
             return driver
+
+
+class ContactsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    name = serializers.SerializerMethodField()
+    phone_number = serializers.CharField()
+    role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'name',
+            'phone_number',
+            'role'
+        ]
+    def get_name(self, obj):
+        return f'{obj.first_name} {obj.last_name}'
+
+    def get_role(self, obj):
+        if Student.objects.filter(user=obj).exists():
+            return 'student'
+        elif Employee.objects.filter(user=obj).exists():
+            return 'employee'
+        else:
+            return 'driver'

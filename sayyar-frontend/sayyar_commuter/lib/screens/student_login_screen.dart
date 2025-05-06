@@ -4,7 +4,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../session_manager.dart';
+import 'home_screen.dart';
 import 'student_register_screen.dart';
 import 'transport_companies_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,11 +42,20 @@ class _StudentLoginScreenState extends State<StudentLoginScreen> {
       Fluttertoast.showToast(
         msg: "Successfully Logged In."
       );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),
-            (Route<dynamic> route) => false,
-      );
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool('is_subscribed')!) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),
+              (Route<dynamic> route) => false,
+        );
+      }
     } else {
       Fluttertoast.showToast(
           msg: result
@@ -305,8 +316,10 @@ Future<String> loginStudent(
       final responseData = jsonDecode(response.body);
       final token = responseData['token'];
       final name = responseData['first_name'];
+      final isSubscribed = responseData['is_subscribed'];
+      final subscribedCompany = responseData['subscribed_company'];
       if (token != null) {
-        await SessionManager.saveToken(token, name);
+        await SessionManager.saveToken(token, name, isSubscribed, subscribedCompany);
         return "Login successful!";
       } else {
         return "Error: Token not found in response.";

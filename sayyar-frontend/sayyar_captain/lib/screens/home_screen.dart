@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sayyar_commuter/screens/profile_screen.dart';
+import 'package:sayyar_captain/screens/profile_screen.dart';
+import 'package:sayyar_captain/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../session_manager.dart';
 import 'direct_messages_screen.dart';
-import 'settings_screen.dart';
-import 'track_driver_screen.dart';
+import 'driver_login_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen>{
 
     await Future.delayed(Duration(milliseconds: 500));
 
-    print(authenticated);
     if (authenticated){
       final prefs = await SharedPreferences.getInstance();
       username = prefs.getString("first_name");
@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen>{
         _isAuthenticated = false;
         username = 'Guest';
         _isLoading = false;
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const DriverLoginScreen()));
       });
     }
   }
@@ -77,19 +78,6 @@ class _HomeScreenState extends State<HomeScreen>{
           child: Column(
             children: [
               Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
-                  leading: const Icon(Icons.access_time_filled, color: Color(0xFF907FFD)),
-                  title: const Text(
-                    'Days till subscription end:',
-                  ),
-                  subtitle: const Text(
-                    '20 Days',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: ListTile(
@@ -99,66 +87,18 @@ class _HomeScreenState extends State<HomeScreen>{
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFC2EA4C),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const TrackDriverScreen()));
-                },
-                icon: const Icon(Icons.location_searching, color: Colors.black),
-                label: const Text(
-                  "Track Your Ride",
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Book a Trip:',
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: _tripButton(
-                        'Single trip',
-                        (){},
-                        Icons.directions_car
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                      child: _tripButton(
-                          'Regular trip',
-                          (){},
-                          Icons.directions_bus
-                      )
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Card(
-                elevation: 1,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
-                  leading:
-                    CircleAvatar(
-                      child: Icon(Icons.person),
-                    ),
-                  title:
-                    Text(
-                      'Your subscription:',
-                    ),
-                  subtitle: Text(
-                    '$companyName'
+              Align(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  "Upcoming trips:",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -168,12 +108,12 @@ class _HomeScreenState extends State<HomeScreen>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       ListTile(
-                        title:Text(
-                          'Upcoming trip:',
-                        ),
-                        subtitle: Text(
-                            'Trip 1, Dec 23, 2024 at 5:30 AM'
-                        )
+                          title:Text(
+                            'Upcoming trip:',
+                          ),
+                          subtitle: Text(
+                              'Trip 1, Dec 23, 2024 at 5:30 AM'
+                          )
                       ),
                       ListTile(
                           title:Text(
@@ -196,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen>{
                 ),
               ),
             ],
-        
+
           ),
         ),
       ),

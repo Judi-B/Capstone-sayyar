@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class TrackDriverScreen extends StatefulWidget {
   const TrackDriverScreen({super.key});
@@ -9,11 +11,27 @@ class TrackDriverScreen extends StatefulWidget {
 }
 
 class _TrackDriverScreenState extends State<TrackDriverScreen> {
-  late GoogleMapController _mapController;
+  GoogleMapController? _mapController;
+
+  bool _locationPermissionGranted = false;
   final LatLng _driverLocation = const LatLng(
     21.3891,
     39.8579,
   ); // Default to Jeddah
+  @override
+  void initState() {
+    super.initState();
+    _checkLocationPermission();
+  }
+
+  Future<void> _checkLocationPermission() async {
+    final status = await Permission.location.request();
+    if (status.isGranted) {
+      setState(() {
+        _locationPermissionGranted = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +49,7 @@ class _TrackDriverScreenState extends State<TrackDriverScreen> {
         children: [
           Expanded(
             child: GoogleMap(
+              myLocationEnabled: _locationPermissionGranted,
               onMapCreated: (controller) => _mapController = controller,
               initialCameraPosition: CameraPosition(
                 target: _driverLocation,

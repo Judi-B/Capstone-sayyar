@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sayyar_captain/screens/driver_login_screen.dart';
 import 'package:sayyar_captain/screens/splash_screen.dart';
 
 
@@ -18,10 +17,11 @@ class SayyarCaptainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sayyar App',
+      title: 'Sayyar Captain App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: DriverLoginScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+

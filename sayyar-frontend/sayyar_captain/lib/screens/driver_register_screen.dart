@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -16,6 +17,11 @@ class DriverRegisterScreen extends StatefulWidget {
 
 class _DriverRegisterScreenState extends State<DriverRegisterScreen> {
 
+  late GoogleMapController mapController;
+  LatLng selectedLocation = LatLng(
+    21.3891,
+    39.8579,
+  ); // Default location (Jeddah)
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -26,6 +32,7 @@ class _DriverRegisterScreenState extends State<DriverRegisterScreen> {
   final passwordController = TextEditingController();
   final companyController = TextEditingController();
   final licenceNumberController = TextEditingController();
+  final locationController = TextEditingController();
 
   void _handleRegister() async {
     setState(() {
@@ -51,6 +58,10 @@ class _DriverRegisterScreenState extends State<DriverRegisterScreen> {
     } else {
       print(result);
     }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
   @override
@@ -215,6 +226,63 @@ class _DriverRegisterScreenState extends State<DriverRegisterScreen> {
                     },
                   ),
                   const SizedBox(height: 30),
+                ],
+              ),
+            ),
+            Text(
+              "Location",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Roboto",
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: selectedLocation,
+                      zoom: 12.0,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: MarkerId("selected-location"),
+                        position: selectedLocation,
+                        draggable: true,
+                        onDragEnd: (newPosition) {
+                          setState(() {
+                            selectedLocation = newPosition;
+                          });
+                        },
+                      ),
+                    },
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                    child: Container(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      padding: EdgeInsets.all(8),
+                      child: Center(
+                        child: Text(
+                          "Drag the pin to select location",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

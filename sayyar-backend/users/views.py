@@ -1,14 +1,14 @@
 import datetime
 
 import environ
-
-import firebase_admin
-from firebase_admin import credentials
-from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.utils import timezone
 from rest_framework.views import APIView
 
-from .models import Student, Employee, Driver
-from .serializers import StudentSerializer, EmployeeSerializer, DriverSerializer
+from businesses.models import Company
+from .models import Student, Employee, Driver, User
+from .serializers import StudentSerializer, EmployeeSerializer, DriverSerializer, StudentLoginSerializer, \
+    ContactsSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -16,11 +16,6 @@ import jwt
 
 env = environ.Env()
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate(env("FIREBASE_API_JSON_PATH"))
-firebase_admin.initialize_app(cred)
-
-User = get_user_model()
 
 
 def get_tokens_for_user(user):
@@ -44,7 +39,7 @@ class StudentLoginView(APIView):
         if (not student) or (not user.check_password(password)):
             return Response({'error': 'Invalid credentials'}, status=400)
 
-        now = datetime.datetime.now()
+        now = timezone.now()
 
         payload = {
             "id": user.id,
@@ -56,13 +51,27 @@ class StudentLoginView(APIView):
 
         response = Response()
         response.set_cookie(key="jwt", value=token, httponly=True)
-        response.data = {
-            "token": token,
-            "first_name": user.first_name,
-            "is_subscribed": student.is_subscribed,
-            "subscribed_company": student.subscribed_company,
-        }
+        response.data = StudentLoginSerializer(student, context={'token': token}).data
         return response
+
+
+class StudentSubscribeView(APIView):
+    def post(self, request):
+        company_name = request.data.get('company_name')
+        token = request.headers.get('Authorization')
+
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        user = User.objects.get(id=user_id)
+        student = Student.objects.filter(user=user).first()
+        with transaction.atomic():
+            try:
+                student.subscribed_company = Company.objects.filter(name=company_name).first()
+                student.is_subscribed = True
+                student.save()
+            except Exception as e:
+                return Response({'error': str(e)}, status=400)
+        return Response({'message': 'Student subscribed successfully'}, status=status.HTTP_200_OK)
 
 class EmployeeLoginView(APIView):
 
@@ -105,7 +114,7 @@ class DriverLoginView(APIView):
         if (not driver) or (not user.check_password(password)):
             return Response({'error': 'Invalid credentials'}, status=400)
 
-        now = datetime.datetime.now()
+        now = timezone.now()
 
         payload = {
             "id": user.id,
@@ -118,9 +127,29 @@ class DriverLoginView(APIView):
         response = Response()
         response.set_cookie(key="jwt", value=token, httponly=True)
         response.data = {
-            "token": token
+            "token": token,
+            "first_name": user.first_name,
         }
         return response
+
+
+class DriverProfileDataView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization')
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        user = User.objects.get(id=user_id)
+        driver = Driver.objects.filter(user=user).first()
+
+        return Response({
+            'name': f'{user.first_name} {user.last_name}',
+            'email': user.email,
+            'licence_number': driver.licence_number,
+            'phone': user.phone_number,
+            'company_name': driver.company.name,
+            'vehicle_plate': driver.vehicle_plate,
+        })
+
 
 
 class StudentRegisterView(APIView):
@@ -148,3 +177,13 @@ class DriverRegisterView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ContactsView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization')
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        users = User.objects.exclude(id=user_id).all()
+        serializer = ContactsSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

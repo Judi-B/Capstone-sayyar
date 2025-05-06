@@ -1,12 +1,19 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:sayyar_commuter/screens/student_login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../session_manager.dart';
+import 'home_screen.dart';
 
 class SubscriptionConfirmationScreen extends StatefulWidget {
   final String subscriptionPlan;
+  final String companyName;
 
-  const SubscriptionConfirmationScreen({super.key, required this.subscriptionPlan});
+  const SubscriptionConfirmationScreen({super.key, required this.subscriptionPlan, required this.companyName});
 
   @override
   _SubscriptionConfirmationScreenState createState() => _SubscriptionConfirmationScreenState();
@@ -46,6 +53,31 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
     }
   }
 
+  void _handleSubscribe() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String result = await subscribeStudent(
+      widget.companyName,
+      context,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+    if (!result.startsWith("Error")) {
+      Fluttertoast.showToast(
+          msg: "Successfully Subscribed."
+      );
+      Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()), (
+            Route<dynamic> route) => false,);
+    } else {
+      print(result);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -75,7 +107,8 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.check_circle_outline, color: Color(0xFFC2EA4C), size: 100),
+            Icon(Icons.check_circle_outline, color: Color(0xFFC2EA4C),
+                size: 100),
             const SizedBox(height: 30),
             Text(
               "You're all set!",
@@ -87,7 +120,8 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
             ),
             const SizedBox(height: 10),
             Text(
-              "Thank you for subscribing to the ${widget.subscriptionPlan} plan.",
+              "Thank you for subscribing to the ${widget
+                  .subscriptionPlan} plan.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -102,9 +136,10 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
                 borderRadius: BorderRadius.circular(12),
               ),
               child: ListTile(
-                leading: Icon(Icons.account_circle, size: 40, color: Color(0xFF907FFD)),
+                leading: Icon(
+                    Icons.account_circle, size: 40, color: Color(0xFF907FFD)),
                 title: Text(
-                  "Welcome, $username",
+                  username!,
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: "Roboto",
@@ -121,11 +156,13 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
             ElevatedButton(
               onPressed: () {
                 // You can navigate to the home screen or dashboard here
+                _handleSubscribe();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFC2EA4C),
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0)),
               ),
               child: Text(
                 "Continue",
@@ -141,5 +178,35 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
         ),
       ),
     );
+  }
+}
+
+
+Future<String> subscribeStudent(String companyName, BuildContext context,) async {
+  const String apiUrl = 'http://192.168.0.156:8000/api/subscribe/student/';
+  try {
+    String? token = await SessionManager.getToken();
+    print(token);
+    final response = await http
+        .post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': '$token',
+      },
+      body: jsonEncode({
+        'company_name': companyName
+      }),
+    ).timeout(const Duration(seconds: 10));
+
+    if (response.statusCode == 200) {
+      return 'Subscription successful';
+    } else {
+      return 'Error: Subscription failed: ${response.body}';
+    }
+  } on TimeoutException catch (_) {
+    return "Error: request timed out. Please try again.";
+  } catch (error) {
+    return "Error: Failed to connect: $error";
   }
 }
