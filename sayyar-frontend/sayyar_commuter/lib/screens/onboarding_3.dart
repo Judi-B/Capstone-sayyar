@@ -31,7 +31,7 @@ class Onboarding3 extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: const Color(0xFF030318),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -51,7 +51,7 @@ class Onboarding3 extends StatelessWidget {
                   SizedBox(width: 5),
                   Icon(Icons.circle, size: 8, color: Colors.grey),
                   SizedBox(width: 5),
-                  Icon(Icons.circle, size: 8, color: Colors.black),
+                  Icon(Icons.circle, size: 8, color: const Color(0xFF030318)),
                 ],
               ),
             ),
@@ -67,7 +67,7 @@ class Onboarding3 extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFF030318),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   ),
                   child: Text(

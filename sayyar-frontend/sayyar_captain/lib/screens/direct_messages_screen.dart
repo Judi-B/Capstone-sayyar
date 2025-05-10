@@ -38,7 +38,7 @@ class _DirectMessagesScreenState extends State<DirectMessagesScreen> {
   }
 
   Future<void> fetchContacts() async {
-    final url = Uri.parse('http://192.168.0.156:8000/api/contacts/');
+    final url = Uri.parse('http://10.0.2.2:8000/api/contacts/');
 
     try {
       _isLoading = true;
@@ -68,7 +68,31 @@ class _DirectMessagesScreenState extends State<DirectMessagesScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading){
-      return CircularProgressIndicator();
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator()
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: const Color(0xFFFAFAFA),
+          elevation: 0,
+          selectedItemColor: const Color(0xFF907FFD),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: 'Chat'),
+            BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+          ],
+          currentIndex: 1,
+          onTap: (index){
+            switch (index){
+              case 0:
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
+
+              case 2:
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+            }
+          },
+        ),
+      );
     }
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA), // Dark navy background
@@ -106,8 +130,8 @@ class _DirectMessagesScreenState extends State<DirectMessagesScreen> {
                         radius: 24,
                         child: const Icon(Icons.person),
                       ),
-                      title: Text(contact['name']!, style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(contact['role']!, style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(contact['name']?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(contact['role']?? '', style: TextStyle(fontWeight: FontWeight.bold)),
                       trailing: Icon(Icons.check_box, color: Colors.grey.shade400),
                       onTap: (){
 
@@ -150,7 +174,7 @@ class _DirectMessagesScreenState extends State<DirectMessagesScreen> {
   }
   //
   // Future<dynamic> _get_users_data() async{
-  //   const apiUrl = 'http://192.168.0.156:8000/api/chat/get-users/';
+  //   const apiUrl = 'http://10.0.2.2:8000/api/chat/get-users/';
   //
   //   try {
   //     final response = await http.get(

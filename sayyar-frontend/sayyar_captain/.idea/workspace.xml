@@ -10,51 +10,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="894dc9ce-aa22-441e-b2f2-c79c6b67b027" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../sayyar-backend/clustering/utils/clustering.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screens/direct_messages_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screens/home_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screens/profile_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screens/settings_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../sayyar-backend/clustering/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/clustering/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../sayyar-backend/clustering/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/clustering/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/ride_booking_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../sayyar-backend/sayyar/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/sayyar/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../sayyar-backend/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../sayyar-backend/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../sayyar-backend/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../sayyar-backend/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sayyar-backend/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/dartpad/web_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/dartpad/web_plugin_registrant.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/GeneratedPluginRegistrant.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/GeneratedPluginRegistrant.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/direct_messages_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/direct_messages_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/driver_login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/driver_login_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/driver_register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/driver_register_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/splash_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/windows/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/android/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/android/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/android/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/android/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/business_login_options_screen.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/chat_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/chat_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/company_details_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/company_details_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/driver_login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/driver_login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/driver_register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/driver_register_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/employee_login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/employee_login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/employee_register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/employee_register_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/enter_location_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/enter_location_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/home_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/role_selection_screen.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_1.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_1.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_2.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_3.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/onboarding_3.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/settings_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/settings_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_home.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/student_register_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/subscription_confirmation_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/subscription_confirmation_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/track_driver_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/track_driver_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/transport_companies_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/screens/transport_companies_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/lib/session_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/lib/session_manager.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sayyar_commuter/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sayyar_commuter/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../sayyar_commuter/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

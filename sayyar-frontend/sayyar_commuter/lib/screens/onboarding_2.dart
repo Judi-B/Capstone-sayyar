@@ -31,7 +31,7 @@ class Onboarding2 extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: const Color(0xFF030318),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -49,7 +49,7 @@ class Onboarding2 extends StatelessWidget {
                 children: [
                   Icon(Icons.circle, size: 8, color: Colors.grey),
                   SizedBox(width: 5),
-                  Icon(Icons.circle, size: 8, color: Colors.black),
+                  Icon(Icons.circle, size: 8, color: const Color(0xFF030318)),
                   SizedBox(width: 5),
                   Icon(Icons.circle, size: 8, color: Colors.grey),
                 ],
@@ -63,7 +63,7 @@ class Onboarding2 extends StatelessWidget {
                   icon: Icon(
                     Icons.arrow_forward,
                     size: 30,
-                    color: Colors.black,
+                    color: const Color(0xFF030318),
                   ),
                   onPressed: () {
                     Navigator.pushReplacement(

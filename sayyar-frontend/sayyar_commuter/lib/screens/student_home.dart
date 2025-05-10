@@ -10,7 +10,7 @@ class StudentHomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Welcome, ", style: TextStyle(color: Colors.black)),
+        title: Text("Welcome, ", style: TextStyle(color: const Color(0xFF030318))),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [

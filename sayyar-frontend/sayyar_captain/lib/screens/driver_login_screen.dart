@@ -277,7 +277,7 @@ Future<String> loginDriver(
     BuildContext context,
     ) async {
   const String apiUrl =
-      'http://192.168.0.156:8000/api/login/driver/'; // Change this to your actual backend URL
+      'http://10.0.2.2:8000/api/login/driver/'; // Change this to your actual backend URL
 
   try {
     final response = await http.post(

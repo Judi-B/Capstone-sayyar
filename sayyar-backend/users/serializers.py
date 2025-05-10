@@ -61,7 +61,7 @@ class StudentLoginSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     first_name = serializers.CharField(source='user.first_name')
     is_subscribed = serializers.BooleanField()
-    subscribed_company = serializers.CharField(source='subscribed_company.name')
+    subscribed_company = serializers.CharField(source='subscribed_company.name', allow_null=True)
 
     class Meta:
         model = Student

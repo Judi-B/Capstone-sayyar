@@ -82,7 +82,7 @@ class _EmployeeLoginScreenState extends State<EmployeeLoginScreen> {
                         style: TextStyle(
                           fontFamily: "Zen Dots",
                           fontSize: 24,
-                          color: Colors.black,
+                          color: const Color(0xFF030318),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -136,7 +136,7 @@ class _EmployeeLoginScreenState extends State<EmployeeLoginScreen> {
                         },
                         color:
                         _isLoading ? Colors.grey : const Color(0xFFC2EA4C),
-                        textColor: Colors.black,
+                        textColor: const Color(0xFF030318),
                       ),
                       const SizedBox(height: 20),
                       TextButton(
@@ -263,7 +263,7 @@ Future<String> loginEmployee(
     BuildContext context,
     ) async {
   const String apiUrl =
-      'http://192.168.0.156:8000/api/login/employee/'; // Change this to your actual backend URL
+      'http://10.0.2.2:8000/api/users/login/employee/'; // Change this to your actual backend URL
 
   try {
     final response = await http.post(

@@ -73,6 +73,26 @@ class StudentSubscribeView(APIView):
                 return Response({'error': str(e)}, status=400)
         return Response({'message': 'Student subscribed successfully'}, status=status.HTTP_200_OK)
 
+
+class StudentProfileView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization')
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        user = User.objects.get(id=user_id)
+        student = Student.objects.filter(user=user).first()
+
+        return Response({
+            'name': f'{user.first_name} {user.last_name}',
+            'email': user.email,
+            'university': student.university,
+            'phone': user.phone_number,
+            'company_name': student.subscribed_company.name,
+            'city': student.city,
+            'district': student.district,
+        })
+
+
 class EmployeeLoginView(APIView):
 
     def post(self, request):

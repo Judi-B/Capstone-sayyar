@@ -78,7 +78,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: const Color(0xFF030318),
             ),
           ),
           SizedBox(height: 5),
@@ -100,7 +100,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
       appBar: AppBar(
         title: Text(
           widget.companyName,
-          style: TextStyle(color: Colors.black, fontFamily: "Roboto"),
+          style: TextStyle(color: const Color(0xFF030318), fontFamily: "Roboto"),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -117,7 +117,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                 child: Icon(
                   Icons.business,
                   size: 40,
-                  color: Colors.black,
+                  color: const Color(0xFF030318),
                 ), // ✅ Icon color ensured
               ),
             ),
@@ -138,7 +138,7 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                           Text(
                             "Subscription plans",
                             textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.black, fontFamily: "Roboto", fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: const Color(0xFF030318), fontFamily: "Roboto", fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 20),
                           SingleChildScrollView(

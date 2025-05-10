@@ -105,7 +105,7 @@ class _TransportCompaniesScreenState extends State<TransportCompaniesScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(_isAuthenticated? "Welcome, $username": "Welcome, Guest", style: TextStyle(color: Colors.black)),
+        title: Text(_isAuthenticated? "Welcome, $username": "Welcome, Guest", style: TextStyle(color: const Color(0xFF030318))),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [

@@ -93,7 +93,7 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
         title: Text(
           "Subscription Confirmed",
           style: TextStyle(
-            color: Colors.black,
+            color: const Color(0xFF030318),
             fontFamily: "Roboto",
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -167,7 +167,7 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
               child: Text(
                 "Continue",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: const Color(0xFF030318),
                   fontSize: 16,
                   fontFamily: "Roboto",
                   fontWeight: FontWeight.bold,
@@ -183,7 +183,7 @@ class _SubscriptionConfirmationScreenState extends State<SubscriptionConfirmatio
 
 
 Future<String> subscribeStudent(String companyName, BuildContext context,) async {
-  const String apiUrl = 'http://192.168.0.156:8000/api/subscribe/student/';
+  const String apiUrl = 'http://10.0.2.2:8000/api/users/subscribe/student/';
   try {
     String? token = await SessionManager.getToken();
     print(token);

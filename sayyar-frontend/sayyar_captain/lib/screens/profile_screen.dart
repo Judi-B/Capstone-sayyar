@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
   }
 
   Future<void> fetchUserData() async {
-    final url = Uri.parse('http://192.168.0.156:8000/api/user-data/driver/');
+    final url = Uri.parse('http://10.0.2.2:8000/api/user-data/driver/');
 
     try {
       setState(() {
@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
     if (_isLoading){
       return Scaffold(
         body: Center(
-          child: CircularProgressIndicator(year2023: true,), // or any loading widget
+          child: CircularProgressIndicator(), // or any loading widget
         ),
       );
     }

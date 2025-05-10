@@ -39,10 +39,10 @@ class _TrackDriverScreenState extends State<TrackDriverScreen> {
       appBar: AppBar(
         title: const Text(
           "Track Driver",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color(0xFF030318)),
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: const Color(0xFF030318)),
         elevation: 0,
       ),
       body: Column(

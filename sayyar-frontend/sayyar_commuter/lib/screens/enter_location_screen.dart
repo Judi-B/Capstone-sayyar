@@ -25,7 +25,7 @@ class _EnterLocationScreenState extends State<EnterLocationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Enter Location", style: TextStyle(color: Colors.black)),
+        title: Text("Enter Location", style: TextStyle(color: const Color(0xFF030318))),
         backgroundColor: Colors.grey[800],
         actions: [
           IconButton(

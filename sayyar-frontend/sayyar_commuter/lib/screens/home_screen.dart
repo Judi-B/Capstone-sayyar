@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sayyar_commuter/screens/profile_screen.dart';
+import 'package:sayyar_commuter/screens/ride_booking_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../session_manager.dart';
 import 'direct_messages_screen.dart';
@@ -59,12 +60,12 @@ class _HomeScreenState extends State<HomeScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Welcome, $username", style: TextStyle(color: Colors.black)),
+        title: Text("Welcome, $username", style: TextStyle(color: const Color(0xFF030318))),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black),
+            icon: const Icon(Icons.settings, color: const Color(0xFF030318)),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsScreen()));
             },
@@ -99,44 +100,46 @@ class _HomeScreenState extends State<HomeScreen>{
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFC2EA4C),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const TrackDriverScreen()));
-                },
-                icon: const Icon(Icons.location_searching, color: Colors.black),
-                label: const Text(
-                  "Track Your Ride",
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Book a Trip:',
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
-                    child: _tripButton(
-                        'Single trip',
-                        (){},
-                        Icons.directions_car
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFC2EA4C),
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const TrackDriverScreen()));
+                      },
+                      icon: const Icon(Icons.location_searching, color: const Color(0xFF030318)),
+                      label: const Text(
+                        "Track Your Ride",
+                        style: TextStyle(color: const Color(0xFF030318), fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
                   Expanded(
-                      child: _tripButton(
-                          'Regular trip',
-                          (){},
-                          Icons.directions_bus
-                      )
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFC2EA4C),
+                        foregroundColor: const Color(0xFF030318),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      ),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const RideBookingScreen()));
+                      },
+                      child: Text(
+                        "Book a ride",
+                        style: TextStyle(color: const Color(0xFF030318), fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -227,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen>{
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFC2EA4C),
-        foregroundColor: Colors.black,
+        foregroundColor: const Color(0xFF030318),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       ),
@@ -241,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen>{
           const SizedBox(height: 20,),
           Text(
             label,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
+            style: TextStyle(color: const Color(0xFF030318), fontWeight: FontWeight.bold, fontSize: 14),
           ),
         ],
       ),

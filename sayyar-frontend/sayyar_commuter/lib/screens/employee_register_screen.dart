@@ -67,7 +67,7 @@ class _EmployeeRegisterScreenState extends State<EmployeeRegisterScreen> {
           title: Text(
             "Register as an Employee",
             style: TextStyle(
-              color: Colors.black,
+              color: const Color(0xFF030318),
               fontFamily: "Roboto",
               fontSize: 24,
             ),
@@ -233,7 +233,7 @@ class _EmployeeRegisterScreenState extends State<EmployeeRegisterScreen> {
                 _isLoading ? null : _handleRegister();
               },
               color: _isLoading ? Colors.grey : const Color(0xFFC2EA4C),
-              textColor: Colors.black,
+              textColor: const Color(0xFF030318),
             ),
           ],
         ),
@@ -347,7 +347,7 @@ Future<String> registerEmployee(
     String role,
     BuildContext context,
     ) async {
-  const String apiUrl = 'http://192.168.0.156:8000/api/register/employee/';
+  const String apiUrl = 'http://10.0.2.2:8000/api/users/register/employee/';
   try {
     final response = await http
         .post(

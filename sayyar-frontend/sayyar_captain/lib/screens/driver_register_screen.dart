@@ -410,7 +410,7 @@ Future<String> registerDriver(
     String licence_number,
     BuildContext context,
     ) async {
-  const String apiUrl = 'http://192.168.0.156:8000/api/register/driver/';
+  const String apiUrl = 'http://10.0.2.2:8000/api/register/driver/';
   try {
     final response = await http
         .post(
