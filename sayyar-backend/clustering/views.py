@@ -1,4 +1,6 @@
+import environ
 import hdbscan
+import jwt
 import numpy as np
 from django.contrib.gis.geos import MultiPoint
 from rest_framework.decorators import api_view
@@ -12,7 +14,7 @@ from .models import Trip, Booking, TripCluster
 from django.utils.dateparse import parse_date
 
 
-
+env = environ.Env()
 
 @api_view(['POST'])
 def cluster_bookings_for_trip(request):
@@ -67,23 +69,25 @@ class BookTripView(APIView):
     }
     """
     def post(self, request):
-        student_id = request.data.get("student_id")
-        trip_id = request.data.get("trip_id")
-        date_str = request.data.get("date")
-        is_recurring = request.data.get("is_recurring", False)
+        trip_type = request.data.get("trip_type")
+        trip_time = request.data.get("trip_time")
+        from_location = request.data.get("from_location", False)
+        to_location = request.data.get("to_location", False)
         weekdays = request.data.get("weekdays", [])
 
-        date = parse_date(date_str)
+        token = request.headers.get('Authorization')
 
-        student = User.objects.get(pk=student_id)
-        trip = Trip.objects.get(pk=trip_id)
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+
+        trip = Trip.objects.filter(direction=trip_type, time=trip_time).first()
 
         booking = Booking.objects.create(
-            student=student,
+            student_id=user_id,
             trip=trip,
-            date=date,
-            is_recurring=is_recurring,
-            weekdays=weekdays if is_recurring else None
+            from_location=from_location,
+            to_location=to_location,
+            weekdays=weekdays
         )
 
         return Response({"message": "Trip booked successfully"}, status=status.HTTP_201_CREATED)
