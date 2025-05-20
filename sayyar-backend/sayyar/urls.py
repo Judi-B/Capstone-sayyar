@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/users/", include("users.urls")),
     path("api/business/", include("businesses.urls")),
-    path("api/trips/", include("clustering.urls"))
+    path("api/system/", include("clustering.urls"))
 ]

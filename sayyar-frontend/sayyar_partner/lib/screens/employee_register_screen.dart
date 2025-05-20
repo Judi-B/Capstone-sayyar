@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:sayyar_commuter/screens/transport_companies_screen.dart';
+import 'package:sayyar_partner/screens/home_screen.dart';
 
 class EmployeeRegisterScreen extends StatefulWidget {
   const EmployeeRegisterScreen({super.key});
@@ -50,7 +50,7 @@ class _EmployeeRegisterScreenState extends State<EmployeeRegisterScreen> {
     if (!result.startsWith("Error")) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } else {
       print(result);

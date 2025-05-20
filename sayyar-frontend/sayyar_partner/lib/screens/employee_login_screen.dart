@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:sayyar_partner/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../session_manager.dart';
 import 'employee_register_screen.dart';
-import 'transport_companies_screen.dart';
 
 class EmployeeLoginScreen extends StatefulWidget {
   const EmployeeLoginScreen({super.key});
@@ -35,12 +38,18 @@ class _EmployeeLoginScreenState extends State<EmployeeLoginScreen> {
       _isLoading = false;
     });
     if (!result.startsWith("Error")) {
-      Navigator.pushReplacement(
+      Fluttertoast.showToast(
+          msg: "Successfully Logged In."
+      );
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => TransportCompaniesScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+            (Route<dynamic> route) => false,
       );
     } else {
-      print(result);
+      Fluttertoast.showToast(
+          msg: result
+      );
     }
   }
 
@@ -275,8 +284,14 @@ Future<String> loginEmployee(
     if (response.statusCode == 200) {
       // Successful login
       final responseData = jsonDecode(response.body);
-      String token = responseData['token'];
-      return "Login successful, Token: $token";
+      final token = responseData['token'];
+      final name = responseData['first_name'];
+      if (token != null) {
+        await SessionManager.saveToken(token, name);
+        return "Login successful!";
+      } else {
+        return "Error: Token not found in response.";
+      }
 
       // Save the token (e.g., using shared_preferences)
     } else {

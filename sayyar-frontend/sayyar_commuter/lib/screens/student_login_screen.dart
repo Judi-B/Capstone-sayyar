@@ -302,7 +302,7 @@ Future<String> loginStudent(
   BuildContext context,
 ) async {
   const String apiUrl =
-      'http://10.0.2.2:8000/api/login/student/'; // Change this to your actual backend URL
+      'http://10.0.2.2:8000/api/users/login/student/'; // Change this to your actual backend URL
 
   try {
     final response = await http.post(

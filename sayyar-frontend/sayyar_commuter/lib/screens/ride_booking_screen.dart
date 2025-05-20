@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+
 
 import '../session_manager.dart';
+import 'home_screen.dart';
 
 class RideBookingScreen extends StatefulWidget {
   const RideBookingScreen({super.key});
@@ -26,20 +28,20 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
 
 
   DateTime selectedDate = DateTime.now();
-  String tripType = 'outgoing';
+  String tripType = 'OUT';
   bool _isLoading = false;
 
   List<dynamic> choices = [];
   List<DropdownMenuEntry<dynamic>> tripTimesOutgoing = [
-    DropdownMenuEntry(value: "6:30 AM - 7:30 AM", label: '1st Trip: Starts on 6:30 AM, Arrives by 7:30 AM'),
-    DropdownMenuEntry(value: "8:00 AM - 9:00 AM", label: '2nd Trip: Starts on 8:00 AM, Arrives by 9:00 AM'),
-    DropdownMenuEntry(value: "10:00 AM - 11:00 AM", label: '3rd Trip: Starts on 10:00 AM, Arrives by 11:00 AM'),
+    DropdownMenuEntry(value: "06:30:00", label: '1st Trip: Starts on 6:30 AM, Arrives by 7:30 AM'),
+    DropdownMenuEntry(value: "08:00:00", label: '2nd Trip: Starts on 8:00 AM, Arrives by 9:00 AM'),
+    DropdownMenuEntry(value: "10:00:00", label: '3rd Trip: Starts on 10:00 AM, Arrives by 11:00 AM'),
   ];
 
   List<DropdownMenuEntry<dynamic>> tripTimesReturn = [
-      DropdownMenuEntry(value: "11:00 AM - 12:00 PM", label: '1st Trip: Starts on 11:00 AM'),
-      DropdownMenuEntry(value: "2:30 PM - 3:30 PM", label: '2nd Trip: Starts on 2:30 PM'),
-      DropdownMenuEntry(value: "4:00 PM - 5:00 PM", label: '3rd Trip: Starts on 4:00 PM'),
+      DropdownMenuEntry(value: "11:00:00", label: '1st Trip: Starts on 11:00 AM'),
+      DropdownMenuEntry(value: "14:30:00", label: '2nd Trip: Starts on 2:30 PM'),
+      DropdownMenuEntry(value: "16:00:00", label: '3rd Trip: Starts on 4:00 PM'),
     ];
 
   List<String?> selectedDaysList = [];
@@ -88,14 +90,14 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
   }
 
   Future<String> _bookTrip(
-      LatLng pickupLocation,
-      LatLng dropoffLocation,
-      List<String> days,
+      LatLng? pickupLocation,
+      LatLng? dropoffLocation,
+      List<String?> days,
       String tripType,
       String tripTime,
       BuildContext context
       ) async {
-    final apiUrl = Uri.parse('http://10.0.2.2:8000/api/trips/book/');
+    final apiUrl = Uri.parse('http://10.0.2.2:8000/api/system/book/');
     final token = await SessionManager.getToken();
     final body = jsonEncode(
       {
@@ -115,17 +117,44 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
           'Authorization': '$token'
         },
         body: body
-      );
+      ).timeout(const Duration(seconds: 10));
       if (response.statusCode != 201){
         return "Error: ${response.body}";
       }
-      return "Successfully Booked a Trip";
+      return response.body;
     } catch (e){
       return "Error: $e";
     }
   }
 
-  Future<void> _determinePosition() async {
+  Future<void> _submit() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String result = await _bookTrip(
+      _pickupLocation,
+      _dropoffLocation,
+      selectedDaysList,
+      tripType,
+      _tripTime,
+      context
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+    if (!result.startsWith("Error")) {
+      Fluttertoast.showToast(
+          msg: result
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
+  }
+
+  void _determinePosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
@@ -219,9 +248,11 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
             minChildSize: 0.2,
             maxChildSize: 0.9,
             builder: (context, scrollController) {
-              if (_isLoading) {
-                return Center(
-                  child: CircularProgressIndicator(),
+              if (_isLoading){
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               }
               return Container(
@@ -318,10 +349,10 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
                           const SizedBox(width: 20),
                           ChoiceChip(
                             label: Text('Outgoing'),
-                            selected: tripType == 'outgoing',
+                            selected: tripType == 'OUT',
                             onSelected: (value){
                               setState(() {
-                                tripType = 'outgoing';
+                                tripType = 'OUT';
                                 _tripTimeController.text = '';
                               });
                             },
@@ -329,10 +360,10 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
                           const SizedBox(width: 20),
                           ChoiceChip(
                             label: Text('Return'),
-                            selected: tripType == 'return',
+                            selected: tripType == 'RET',
                             onSelected: (value){
                               setState(() {
-                                tripType = 'return';
+                                tripType = 'RET';
                                 _tripTimeController.text = '';
                               });
                             },
@@ -340,7 +371,7 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      tripType == 'outgoing'?
+                      tripType == 'OUT'?
                       DropdownMenu(
                         inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
                         label: Text('Trip time'),
@@ -392,7 +423,7 @@ class _RideBookingScreenState extends State<RideBookingScreen> {
                         onPressed: (_pickupLocation != null && _dropoffLocation != null && _tripTime.isNotEmpty)
                             ? () {
                           _updateSelectedDaysList();
-                          print(selectedDaysList);
+                          _submit();
                         }
                             : null,
                         child: const Text("Confirm Ride"),

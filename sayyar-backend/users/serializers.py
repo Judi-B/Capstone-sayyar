@@ -151,3 +151,35 @@ class ContactsSerializer(serializers.ModelSerializer):
             return 'employee'
         else:
             return 'driver'
+
+
+class DriverListSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    phone_number = serializers.CharField(source='user.phone_number')
+    is_available = serializers.BooleanField()
+    class Meta:
+        model = Driver
+        fields = [
+            'name',
+            'phone_number',
+            'is_available'
+        ]
+
+    def get_name(self, obj):
+        return f'{obj.user.first_name} {obj.user.last_name}'
+
+
+class StudentListSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    university = serializers.CharField()
+    is_subscribed = serializers.BooleanField()
+    class Meta:
+        model = Student
+        fields = [
+            'name',
+            'university',
+            'is_subscribed'
+        ]
+
+    def get_name(self, obj):
+        return f'{obj.user.first_name} {obj.user.last_name}'

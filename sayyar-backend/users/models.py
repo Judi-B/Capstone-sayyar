@@ -46,7 +46,6 @@ class CustomUserManager(BaseUserManager):
         user.save()
         return user
 
-
 # Custom user class
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=100, null=True, blank=True, unique=True)
@@ -130,6 +129,7 @@ class Driver(models.Model):
     vehicle_plate = models.CharField(max_length=50, null=True, blank=True)
     is_available = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    location = models.PointField(geography=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:

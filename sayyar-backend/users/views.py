@@ -8,9 +8,10 @@ from rest_framework.views import APIView
 from businesses.models import Company
 from .models import Student, Employee, Driver, User
 from .serializers import StudentSerializer, EmployeeSerializer, DriverSerializer, StudentLoginSerializer, \
-    ContactsSerializer
+    ContactsSerializer, DriverListSerializer, StudentListSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets
 from rest_framework_simplejwt.tokens import RefreshToken
 import jwt
 
@@ -98,14 +99,14 @@ class EmployeeLoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-        user = User.objects.get(email=email)
+        user = User.objects.filter(email=email).first()
 
         employee = Employee.objects.filter(user=user).first()  # Assumes email is used as username
 
         if (not employee) or (not user.check_password(password)):
             return Response({'error': 'Invalid credentials'}, status=400)
 
-        now = datetime.datetime.now()
+        now = timezone.now()
 
         payload = {
             "id": user.id,
@@ -118,7 +119,8 @@ class EmployeeLoginView(APIView):
         response = Response()
         response.set_cookie(key="jwt", value=token, httponly=True)
         response.data = {
-            "token": token
+            "token": token,
+            "first_name": user.first_name,
         }
         return response
 
@@ -170,6 +172,22 @@ class DriverProfileDataView(APIView):
             'vehicle_plate': driver.vehicle_plate,
         })
 
+class EmployeeProfileDataView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization')
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        user = User.objects.get(id=user_id)
+        employee = Employee.objects.filter(user=user).first()
+
+        return Response({
+            'name': f'{user.first_name} {user.last_name}',
+            'email': user.email,
+            'role': employee.role,
+            'phone': user.phone_number,
+            'company_name': employee.company.name,
+        })
+
 
 
 class StudentRegisterView(APIView):
@@ -206,4 +224,26 @@ class ContactsView(APIView):
         user_id = decoded_token['id']
         users = User.objects.exclude(id=user_id).all()
         serializer = ContactsSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DriversViewset(viewsets.ModelViewSet):
+    queryset = Driver.objects.all()
+    serializer_class = DriverListSerializer
+
+
+class StudentsViewset(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentListSerializer
+    def list(self, request, *args, **kwargs):
+        token = request.headers.get('Authorization')
+        decoded_token = jwt.decode(token, env("SECRET_KEY"), algorithms=['HS256'])
+        user_id = decoded_token['id']
+        user = User.objects.get(id=user_id)
+        company = Employee.objects.get(user=user).company
+
+        queryset = self.get_queryset()
+        filtered_queryset = queryset.filter(subscribed_company=company)
+
+        serializer = StudentListSerializer(filtered_queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
