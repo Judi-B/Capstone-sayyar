@@ -5,17 +5,21 @@
 
 ## Tech stack 
 
+A full-stack application built with Django and Django REST Framework on the backend, PostgreSQL as the database, and Flutter as the mobile frontend.
 
-### Backend: 
-- Python (3.x),  
-- Django 5.1.5, 
-- Django REST Framework, 
-- djangorestframework-simplejwt, 
-- Firebase Admin SDK, 
-- Google Cloud client libraries (Google maps),
-- PostgreSQL; 
+The backend exposes RESTful APIs consumed by the Flutter application. Authentication is handled using JWT (JSON Web Tokens), allowing the Flutter client to securely authenticate users and access protected API endpoints.
+
+### Backend
+- Python
+- Django
+- Django REST Framework
+- PostgreSQL
+- JWT Authentication
+- django-environ for environment configuration
 
 
-### Frontend: 
-
-Flutter, Dart
+### Frontend
+- Flutter
+- Dart
+- REST API integration
+- JWT-based authentication
